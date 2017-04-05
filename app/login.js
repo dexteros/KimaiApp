@@ -6,11 +6,11 @@ import {
   Image,
   Dimensions,
   TextInput,
-  TouchableOpacity,
-  Button
+  TouchableOpacity
 } from 'react-native';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { API_URL } from './config/globals';
 
 const { width, height } = Dimensions.get("window");
 const background = require("./assets/images/bg.jpg");
@@ -24,6 +24,11 @@ export default class LoginView extends Component {
        visible: false,
     },
   };
+
+  constructor(props) {
+    super(props);
+    this.state = { username: '','password': '' };
+  }
 
   render() {
     
@@ -41,6 +46,7 @@ export default class LoginView extends Component {
                 <Icon name="account-outline" size={30} color="#fff" />
               </View>
               <TextInput 
+                onChangeText={(username) => this.setState({username})}
                 placeholder="Username" 
                 placeholderTextColor="#FFF"
                 style={styles.input} 
@@ -51,6 +57,7 @@ export default class LoginView extends Component {
                 <Icon name="lock-outline" size={30} color="#fff" />
               </View>
               <TextInput 
+                onChangeText={(password) => this.setState({password})}
                 placeholderTextColor="#FFF"
                 placeholder="Password" 
                 style={styles.input} 
@@ -62,10 +69,9 @@ export default class LoginView extends Component {
                 <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={.5}>
+            <TouchableOpacity activeOpacity={.5} onPress={this.doLogin}>
               <View style={styles.button}>
-                <Text style={styles.buttonText}
-                  onPress={() => navigate('Signup')}>SIGN IN</Text>
+                <Text style={styles.buttonText}>SIGN IN ></Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -84,6 +90,39 @@ export default class LoginView extends Component {
       </View>
     );
   }
+
+
+  doLogin = () => {
+    
+      fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: null,
+          method:'authenticate',
+          params:{"username":this.state.username,"password":this.state.password}
+        })
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+          if(responseJson.result.success == true){
+              alert(responseJson.result.items[0].apiKey);
+          }else{
+              alert(responseJson.result.error.msg);
+          }
+        
+        return;
+      })
+      .catch((error) => {
+        alert(error);
+        //console.error(error);        
+      });
+  }
+
 }
 
 const styles = StyleSheet.create({

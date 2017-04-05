@@ -1,0 +1,1 @@
+export const API_URL = 'http://52.32.1.107/kimai/core/json.php';

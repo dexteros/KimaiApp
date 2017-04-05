@@ -29,5 +29,5 @@ export const Kimai = StackNavigator({
         }
 },
 {
-  initialRouteName: 'Task',
+  initialRouteName: 'Login',
 });

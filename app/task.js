@@ -33,7 +33,7 @@ export default class TaskView extends Component {
 	       	},
 	       	right: (
 	      		<TouchableOpacity onPress={() => navigate('Login')}>
-	        		<Icon name="menu" size={30} color="#fff" />        
+	        		<Icon name="dots-vertical" size={30} color="#fff" />        
 	      		</TouchableOpacity>      
 	    	)
     	}       
